@@ -4,8 +4,8 @@ const userController = require('../Controllers/UserController');
 
 
 
-router.get('/customer', userController.getListUser);
-router.get('/admin', userController.userDetail);
+router.get('/', userController.getListUser);
+router.get('/detail', userController.userDetail);
 
 
 module.exports = router;

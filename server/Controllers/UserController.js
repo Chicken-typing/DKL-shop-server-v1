@@ -3,7 +3,7 @@ const getListUser = (req, res) => {
 }
 
 const userDetail = (req, res) => {
-    res.send('list information');
+    res.send('user detail');
 }
 
 module.exports = {
