@@ -1,4 +1,6 @@
 const userModel = require('../Models/UserModel');
+const bcrypt = require('bcrypt');
+const UserModel = require('../Models/UserModel');
 
 const register = async (req, res) => {
     try {
@@ -10,7 +12,7 @@ const register = async (req, res) => {
         await userModel.create({
             username: username,
             email: email,
-            password: password,
+            password: bcrypt.hashSync(password,10),
             role: 'customer',
         });
         return res.status(200).send('register user');
@@ -20,6 +22,22 @@ const register = async (req, res) => {
 
 };
 
+const login = async (req, res) => {
+    // check email, password
+    const user = await userModel.findOne({email: req.body.email});
+    if (!user) {
+        return res.status(400).send('Invalid email or password');
+    }
+    // check password
+    const isPasswordValid = bcrypt.compareSync(req.body.password,  user.password);
+    if(!isPasswordValid) {
+        return res.status(400).send('Invalid email or password');
+    }
+    return res.status(200).send('Login successful');
+
+}
+
 module.exports = {
-    register: register
+    register: register,
+    login: login
 };
