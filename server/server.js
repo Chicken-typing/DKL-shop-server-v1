@@ -7,7 +7,7 @@ const userRoute = require('./Router/UserRoute');
 const authRoute = require('./Router/AuthRoute');
 const connectDB = require('./Services/ConnectDBService');
 
-const port = 5000;
+require('dotenv').config()
 //middleware apply cors add all requests
 app.use(cors());
 
@@ -18,11 +18,11 @@ app.use(express.json());
 connectDB();
 
 //middleware router
-app.use('/users', userRoute);
+app.use('/auth/admin', userRoute);
 //api/auth/register -- post
 app.use('/api/auth', authRoute);
 
 
-app.listen(port, function(){
-    console.log('server listen on port 5000');
+app.listen(process.env.PORT, function(){
+    console.log(`server running on port ${process.env.PORT}`);
 });
