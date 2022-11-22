@@ -1,0 +1,73 @@
+import bcrypt from 'bcryptjs';
+
+const data = {
+    users: [
+        {
+            username: 'dattan',
+            email:'dattan2911@gmail.com',
+            password: bcrypt.hashSync('123456'),
+            role: 'admin',
+        },
+        {
+            username: 'abc',
+            email:'abc@gmail.com',
+            password: bcrypt.hashSync('123456'),
+            role: 'customer',
+        },
+    ],
+    products: [
+        {
+            name: "Nike Air Force 1 Mid React",
+            slug:"nike-air-force-1-mid-react",
+            countInStock: 12,
+            brand: "Nike",
+            category: "Men",
+            size: 29,
+            price: 500,
+            image: '/images/airforce1midreact.png',
+            rating: 4.5,
+            numReviews: 10,
+            description: 'Trending for the boys',
+        },
+        { 
+            name: "Nike Air Max 97 SE",
+            slug:"nike-air-max-97-SE",
+            countInStock: 10,
+            brand: "Nike",
+            category: "Women",
+            size: 27,
+            price: 450,
+            image: '/images/airmax97se.png',
+            rating: 4.7,
+            numReviews: 15,
+            description: 'Best for women',
+        },
+        {
+            name: "Predator Mutator 20.3 TURF",
+            slug:"predator_mutator_20.3_turf",
+            countInStock: 1,
+            brand: "Adidas",
+            category: "Men",
+            size: 29,
+            price: 600,
+            image: '/images/PREDATORMUTATOR203TURF.png',
+            rating: 4.5,
+            numReviews: 10,
+            description: 'Trending for younger',
+        },
+        {
+            name: "Adidas 4DFWD 2",
+            slug:"adidas-4dfwd-2",
+            countInStock: 0,
+            brand: "Adidas",
+            category: "Men",
+            size: 30,
+            price: 800,
+            image: '/images/ADIDAS4DFWD2.png',
+            rating: 4.5,
+            numReviews: 10,
+            description: 'Trending for younger',
+        },
+    ],
+};
+export default data;
