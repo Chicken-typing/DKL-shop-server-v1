@@ -25,6 +25,11 @@ app.use('/api/products', productRoute);
 app.use('/api/users', userRoute);
 app.use('/api/orders', orderRoute);
 
+app.get('/api/keys/paypal', (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
+});
+
+
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
