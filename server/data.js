@@ -80,6 +80,19 @@ const data = {
             numReviews: 10,
             description: 'Running man!',
         },
+        {
+            name: "Nike Air Deldon Lyme",
+            slug:"nike-air-deldon-lyme",
+            countInStock: 20,
+            brand: "Nike",
+            category: "Women",
+            size: 28,
+            price: 650,
+            image: '/images/NikeAirDeldonLyme.png',
+            rating: 4.9,
+            numReviews: 10,
+            description: 'Easy On/Off Basketball Shoes',
+        },
     ],
 };
 export default data;

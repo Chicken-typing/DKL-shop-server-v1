@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { response } from 'express';
 import bcrypt from 'bcryptjs';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
-import { generateToken } from '../utils.js';
+import { isAuthenticated, generateToken } from '../utils.js';
 
 const userRoute = express.Router();
 
@@ -42,6 +42,32 @@ userRoute.post(
       role: user.role,
       token: generateToken(user),
     });
+  })
+);
+
+userRoute.put(
+  '/profile',
+  isAuthenticated,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.name = req.body.username || user.username;
+      user.email = req.body.email || user.email;
+      if (req.body.password) {
+        user.password = bcrypt.hashSync(req.body.password, 8);
+      }
+
+      const updatedUser = await user.save();
+      res.send({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        token: generateToken(updatedUser),
+      });
+    } else {
+      res.status(404).send({ message: 'User not found' });
+    }
   })
 );
 
