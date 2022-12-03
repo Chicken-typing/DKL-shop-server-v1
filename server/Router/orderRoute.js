@@ -6,6 +6,17 @@ import Product from '../models/productModel.js';
 import { isAuthenticated, isAdmin } from '../utils.js';
 
 const orderRoute = express.Router();
+
+orderRoute.get(
+  '/',
+  isAuthenticated,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const orders = await Order.find().populate('user', 'username');
+    res.send(orders);
+  })
+);
+
 orderRoute.post(
   '/',
   isAuthenticated,
@@ -94,6 +105,22 @@ orderRoute.get(
 );
 
 orderRoute.put(
+  '/:id/deliver',
+  isAuthenticated,
+  expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+      await order.save();
+      res.send({ message: 'Order Delivered' });
+    } else {
+      res.status(404).send({ message: 'Order Not Found' });
+    }
+  })
+);
+
+orderRoute.put(
   '/:id/pay',
   isAuthenticated,
   expressAsyncHandler(async (req, res) => {
@@ -110,6 +137,21 @@ orderRoute.put(
 
       const updatedOrder = await order.save();
       res.send({ message: 'Order Paid', order: updatedOrder });
+    } else {
+      res.status(404).send({ message: 'Order Not Found' });
+    }
+  })
+);
+
+orderRoute.delete(
+  '/:id',
+  isAuthenticated,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      await order.remove();
+      res.send({ message: 'Order Deleted' });
     } else {
       res.status(404).send({ message: 'Order Not Found' });
     }
