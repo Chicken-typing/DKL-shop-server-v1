@@ -6,6 +6,7 @@ import seedRoute from './Router/seedRoute.js';
 import productRoute from './Router/productRoute.js';
 import userRoute from './Router/userRoute.js';
 import orderRoute from './Router/orderRoute.js';
+import uploadRoute from './Router/uploadRoute.js';
 import cors from 'cors';
 dotenv.config();
 
@@ -19,12 +20,16 @@ const app = express();
 
 app.use(cors());
 
+//middleware get information from client by req.body
+app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/seed', seedRoute);
 app.use('/api/products', productRoute);
 app.use('/api/users', userRoute);
 app.use('/api/orders', orderRoute);
+app.use('/api/upload', uploadRoute);
 
 app.get('/api/keys/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
