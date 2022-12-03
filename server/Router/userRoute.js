@@ -2,9 +2,39 @@ import express, { response } from 'express';
 import bcrypt from 'bcryptjs';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
-import { isAuthenticated, generateToken } from '../utils.js';
+import { isAuthenticated,isAdmin, generateToken } from '../utils.js';
 
 const userRoute = express.Router();
+
+userRoute.get(
+  '/',
+  isAuthenticated,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.send(users);
+  })
+);
+
+
+userRoute.delete(
+  '/:id',
+  isAuthenticated,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      if (user.role === 'admin'|| user.role === 'masteradmin') {
+        res.status(400).send({ message: 'Can Not Delete Admin User' });
+        return;
+      }
+      await user.remove();
+      res.send({ message: 'User Deleted' });
+    } else {
+      res.status(404).send({ message: 'User Not Found' });
+    }
+  })
+);
 
 userRoute.post(
   '/signin',
@@ -32,6 +62,7 @@ userRoute.post(
     const newUser = new User({
       username: req.body.username,
       email: req.body.email,
+      role: 'customer',
       password: bcrypt.hashSync(req.body.password),
     });
     const user = await newUser.save();
@@ -39,7 +70,7 @@ userRoute.post(
       _id: user._id,
       username: user.username,
       email: user.email,
-      role: user.role,
+      role: 'customer',
       token: generateToken(user),
     });
   })
