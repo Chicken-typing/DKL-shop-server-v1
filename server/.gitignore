@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+productRoute.js
+package.json
+
 # testing
 /coverage
 
