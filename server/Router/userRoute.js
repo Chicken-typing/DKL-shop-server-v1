@@ -62,7 +62,12 @@ userRoute.post(
     const newUser = new User({
       username: req.body.username,
       email: req.body.email,
+      avatar: req.body.avatar,
+      birthday: req.body.birthday,
+      address: req.body.address,
+      phone: req.body.phone,
       role: 'customer',
+      isActive: true,
       password: bcrypt.hashSync(req.body.password),
     });
     const user = await newUser.save();
@@ -71,6 +76,7 @@ userRoute.post(
       username: user.username,
       email: user.email,
       role: 'customer',
+      isActive: true,
       token: generateToken(user),
     });
   })
@@ -93,7 +99,10 @@ userRoute.put(
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
-        role: updatedUser.role,
+        avatar: updatedUser.avatar,
+        birthday: updatedUser.birthday,
+        address: updatedUser.address,
+        phone: updatedUser.phone,
         token: generateToken(updatedUser),
       });
     } else {
