@@ -39,6 +39,7 @@ app.get('/api/keys/paypal', (req, res) => {
 
 
 app.use((err, req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
   res.status(500).send({ message: err.message });
 });
 
