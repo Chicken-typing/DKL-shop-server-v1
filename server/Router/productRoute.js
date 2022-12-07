@@ -17,7 +17,7 @@ productRoute.post(
   expressAsyncHandler(async (req, res) => {
     const newProduct = new Product({
       name: req.body.name,
-      slug: req.body.slug,
+      // slug: req.body.slug,
       image: req.body.image,
       images: req.body.images,
       defaultImage: req.body.defaultImage,
@@ -59,7 +59,7 @@ productRoute.put(
     const product = await Product.findById(productId);
     if (product) {
       product.name = req.body.name;
-      product.slug = req.body.slug;
+      // product.slug = req.body.slug;
       product.price = req.body.price;
       product.image = req.body.image;
       product.images = req.body.images;
