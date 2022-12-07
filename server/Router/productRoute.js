@@ -17,13 +17,11 @@ productRoute.post(
   expressAsyncHandler(async (req, res) => {
     const newProduct = new Product({
       name: req.body.name,
-      // slug: req.body.slug,
-      // image: req.body.image,
       images: req.body.images,
-      defaultImage: req.body.defaultImage,
+      defaultImage: req.body.images[0],
       price: req.body.price,
       category: req.body.category,
-      size: req.body.size,
+      size: ["35","36","37","38","39","40","41","42","43"],
       brand: req.body.brand,
       countInStock: req.body.countInStock,
       rating: 0,
@@ -34,8 +32,6 @@ productRoute.post(
     res.send({
       _id: product._id,
       name: product.name,
-      // slug: product.slug,
-      // image: product.image,
       images: product.images,
       defaultImage: product.defaultImage,
       price: product.price,
@@ -59,14 +55,11 @@ productRoute.put(
     const product = await Product.findById(productId);
     if (product) {
       product.name = req.body.name;
-      // product.slug = req.body.slug;
       product.price = req.body.price;
-      // product.image = req.body.image;
       product.images = req.body.images;
       product.defaultImage = req.body.images[0];
       product.category = req.body.category;
       product.brand = req.body.brand;
-      product.size = req.body.size;
       product.countInStock = req.body.countInStock;
       product.description = req.body.description;
       await product.save();
