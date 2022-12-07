@@ -17,8 +17,6 @@ productRoute.post(
   expressAsyncHandler(async (req, res) => {
     const newProduct = new Product({
       name: req.body.name,
-      // slug: req.body.slug,
-      // image: req.body.image,
       images: req.body.images,
       defaultImage: req.body.images[0],
       price: req.body.price,
@@ -34,8 +32,6 @@ productRoute.post(
     res.send({
       _id: product._id,
       name: product.name,
-      // slug: product.slug,
-      // image: product.image,
       images: product.images,
       defaultImage: product.defaultImage,
       price: product.price,
