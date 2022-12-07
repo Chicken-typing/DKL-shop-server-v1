@@ -10,31 +10,8 @@ productRoute.get('/', async (req, res) => {
   res.send(products);
 });
 
-// productRoute.post(
-//   '/',
-//   isAuthenticated,
-//   isAdmin,
-//   expressAsyncHandler(async (req, res) => {
-//     const newProduct = new Product({
-//       name: 'sample name ' + Date.now(),
-//       slug: 'sample-name-' + Date.now(),
-//       image: '/images/airforce1midreact.png',
-//       price: 50,
-//       category: 'sample category',
-//       size: 29,
-//       brand: 'sample brand',
-//       countInStock: 10,
-//       rating: 0,
-//       numReviews: 3,
-//       description: 'sample description',
-//     });
-//     const product = await newProduct.save();
-//     res.send({ message: 'Product Created', product });
-//   })
-// );
-
 productRoute.post(
-  '/addproduct',
+  '/',
   isAuthenticated,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
@@ -86,7 +63,7 @@ productRoute.put(
       product.price = req.body.price;
       product.image = req.body.image;
       product.images = req.body.images;
-      product.defaultImage = req.body.defaultImage;
+      product.defaultImage = req.body.images[0];
       product.category = req.body.category;
       product.brand = req.body.brand;
       product.size = req.body.size;
