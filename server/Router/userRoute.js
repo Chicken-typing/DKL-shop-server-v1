@@ -2,7 +2,7 @@ import express, { response } from 'express';
 import bcrypt from 'bcryptjs';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
-import { isAuthenticated,isAdmin, generateToken } from '../utils.js';
+import { isAuthenticated, isAdmin, generateToken, isMasterAdmin } from '../utils.js';
 
 const userRoute = express.Router();
 
@@ -16,6 +16,55 @@ userRoute.get(
   })
 );
 
+userRoute.post(
+  '/',
+  isAuthenticated,
+  isMasterAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const newUser = new User({
+      username: req.body.username,
+      email: req.body.email,
+      // avatar: req.body.avatar,
+      birthday: req.body.birthday,
+      address: req.body.address,
+      phone: req.body.phone,
+      role: 'admin',
+      isActive: true,
+      password: bcrypt.hashSync(req.body.password),
+    });
+    const user = await newUser.save();
+    res.send({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      birthday: user.birthday,
+      address: user.address,
+      phone: user.phone,
+      role: 'admin',
+      isActive: true,
+      token: generateToken(user),
+    });
+  })
+);
+
+userRoute.delete(
+  'admin/:id',
+  isAuthenticated,
+  isMasterAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      if (user.role === 'masteradmin') {
+        res.status(400).send({ message: 'Can Not Delete Master Admin User' });
+        return;
+      }
+      await user.remove();
+      res.send({ message: 'User Deleted' });
+    } else {
+      res.status(404).send({ message: 'User Not Found' });
+    }
+  })
+);
 
 userRoute.delete(
   '/:id',

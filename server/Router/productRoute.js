@@ -18,7 +18,7 @@ productRoute.post(
     const newProduct = new Product({
       name: req.body.name,
       // slug: req.body.slug,
-      image: req.body.image,
+      // image: req.body.image,
       images: req.body.images,
       defaultImage: req.body.defaultImage,
       price: req.body.price,
@@ -34,8 +34,8 @@ productRoute.post(
     res.send({
       _id: product._id,
       name: product.name,
-      slug: product.slug,
-      image: product.image,
+      // slug: product.slug,
+      // image: product.image,
       images: product.images,
       defaultImage: product.defaultImage,
       price: product.price,
@@ -61,7 +61,7 @@ productRoute.put(
       product.name = req.body.name;
       // product.slug = req.body.slug;
       product.price = req.body.price;
-      product.image = req.body.image;
+      // product.image = req.body.image;
       product.images = req.body.images;
       product.defaultImage = req.body.images[0];
       product.category = req.body.category;
