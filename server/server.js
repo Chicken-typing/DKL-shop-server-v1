@@ -51,7 +51,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://staging-dkl.netlify.app",
     methods: ["GET", "POST", "DELETE", "PUT"],
   }
 });
