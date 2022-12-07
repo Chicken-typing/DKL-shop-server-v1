@@ -10,9 +10,8 @@ productRoute.get('/', async (req, res) => {
   res.send(products);
 });
 
-
 productRoute.post(
-  '/addproduct',
+  '/',
   isAuthenticated,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
@@ -20,6 +19,8 @@ productRoute.post(
       name: req.body.name,
       slug: req.body.slug,
       image: req.body.image,
+      images: req.body.images,
+      defaultImage: req.body.defaultImage,
       price: req.body.price,
       category: req.body.category,
       size: req.body.size,
@@ -35,6 +36,8 @@ productRoute.post(
       name: product.name,
       slug: product.slug,
       image: product.image,
+      images: product.images,
+      defaultImage: product.defaultImage,
       price: product.price,
       category: product.category,
       size: product.size,
@@ -59,6 +62,8 @@ productRoute.put(
       product.slug = req.body.slug;
       product.price = req.body.price;
       product.image = req.body.image;
+      product.images = req.body.images;
+      product.defaultImage = req.body.images[0];
       product.category = req.body.category;
       product.brand = req.body.brand;
       product.size = req.body.size;
