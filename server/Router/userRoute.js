@@ -169,6 +169,36 @@ userRoute.put(
     }
   })
 );
+userRoute.put(
+  '/:id',
+  isAuthenticated,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.isActive = req.body.isActive || user.isActive;
+      if (req.body.password) {
+        user.password = bcrypt.hashSync(req.body.password, 8)
+      }
+      else{
+        user.password = user.password;
+      }
 
+      const updatedUser = await user.save();
+      res.send({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        avatar: updatedUser.avatar,
+        birthday: updatedUser.birthday,
+        address: updatedUser.address,
+        phone: updatedUser.phone,
+        isActive: updateUser.isActive,
+        token: generateToken(updatedUser),
+      });
+    } else {
+      res.status(404).send({ message: 'User not found' });
+    }
+  })
+);
 
 export default userRoute;
