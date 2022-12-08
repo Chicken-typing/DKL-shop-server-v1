@@ -11,7 +11,7 @@ userRoute.get(
   isAuthenticated,
   // isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const users = await User.find({role : 'customer'});
+    const users = await User.find();
     res.send(users);
   })
 );

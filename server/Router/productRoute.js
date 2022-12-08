@@ -54,8 +54,8 @@ productRoute.put(
     const productId = req.params.id;
     const product = await Product.findById(productId);
     if (product) {
-      product.price = req.body.price;
-      product.description = req.body.description;
+      product.price = req.body.price||product.price;
+      product.description = req.body.description||product.description;
       await product.save();
       res.send({ message: 'Product Updated' });
     } else {
