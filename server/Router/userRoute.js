@@ -9,12 +9,22 @@ const userRoute = express.Router();
 userRoute.get(
   '/',
   isAuthenticated,
-  isAdmin,
+  // isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const users = await User.find({});
+    const users = await User.find({role : 'customer'});
     res.send(users);
   })
 );
+
+// userRoute.get(
+//   '/listadmin',
+//   isAuthenticated,
+//   isMasterAdmin,
+//   expressAsyncHandler(async (req, res) => {
+//     const users = await User.find({role: 'admin'});
+//     res.send(users);
+//   })
+// );
 
 userRoute.post(
   '/',
