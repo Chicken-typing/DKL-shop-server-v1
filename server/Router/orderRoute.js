@@ -73,7 +73,7 @@ orderRoute.get(
       {
         $group: {
           _id: null,
-          type:'$category',
+          type:{$sum:'$category'},
           value: { $sum: 1 },
         },
       },
