@@ -34,7 +34,7 @@ export const isAuthenticated = (req, res, next) => {
 };
 
 export const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
+  if (req.user && req.user.role === 'admin' || req.user.role === 'masteradmin') {
     next();
   } else {
     res.status(401).send({ message: 'Invalid Admin Token' });
