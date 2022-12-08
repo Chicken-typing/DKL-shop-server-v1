@@ -72,8 +72,9 @@ orderRoute.get(
     const productCategories = await Product.aggregate([
       {
         $group: {
-          _id: '$category',
-          count: { $sum: 1 },
+          _id: null,
+          type:'$category',
+          value: { $sum: 1 },
         },
       },
     ]);
