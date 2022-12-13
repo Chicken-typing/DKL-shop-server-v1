@@ -30,6 +30,8 @@ orderRoute.post(
       taxPrice: req.body.taxPrice,
       totalPrice: req.body.totalPrice,
       user: req.user._id,
+      paymentResult: { ...req.body.paymentResult },
+      isPaid: req.body.paymentResult.status === "COMPLETED" ? true : false,
     });
 
     const order = await newOrder.save();
@@ -135,7 +137,6 @@ orderRoute.put(
         update_time: req.body.update_time,
         email_address: req.body.email_address,
       };
-
       const updatedOrder = await order.save();
       res.send({ message: 'Order Paid', order: updatedOrder });
     } else {
