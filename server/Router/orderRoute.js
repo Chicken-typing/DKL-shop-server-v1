@@ -77,6 +77,7 @@ orderRoute.get(
       },
       {
         $group: {
+          _id: null,
           type: {$first: 'Man'},
           value: { $sum: 1 },
         },
@@ -88,6 +89,7 @@ orderRoute.get(
       },
       {
         $group: {
+          _id: null,
           type: {$first: 'Woman'},
           value: { $sum: 1 },
         },
@@ -99,6 +101,7 @@ orderRoute.get(
       },
       {
         $group: {
+          _id: null,
           type: {$first: 'Kid'},
           value: { $sum: 1 },
         },
