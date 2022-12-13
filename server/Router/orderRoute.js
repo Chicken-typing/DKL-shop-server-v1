@@ -71,15 +71,40 @@ orderRoute.get(
       },
       { $sort: { _id: 1 } },
     ]);
-    const productCategories = await Product.aggregate([
+    const manCategories = await Product.aggregate([
+      {
+        $match: {category: 'man'}
+      },
       {
         $group: {
-          _id:'$category',
-          type:{"$first":'$category'},
+          type: {$first: 'Man'},
           value: { $sum: 1 },
         },
       },
     ]);
+    const womanCategories = await Product.aggregate([
+      {
+        $match: {category: 'woman'}
+      },
+      {
+        $group: {
+          type: {$first: 'Woman'},
+          value: { $sum: 1 },
+        },
+      },
+    ]);
+    const kidCategories = await Product.aggregate([
+      {
+        $match: {category: 'kid'}
+      },
+      {
+        $group: {
+          type: {$first: 'Kid'},
+          value: { $sum: 1 },
+        },
+      },
+    ]);
+    const productCategories = [...manCategories, ...womanCategories,...kidCategories];
     res.send({ users, orders, dailyOrders, productCategories });
   })
 );
@@ -137,6 +162,7 @@ orderRoute.put(
         update_time: req.body.update_time,
         email_address: req.body.email_address,
       };
+
       const updatedOrder = await order.save();
       res.send({ message: 'Order Paid', order: updatedOrder });
     } else {
