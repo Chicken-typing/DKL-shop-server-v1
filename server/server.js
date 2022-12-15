@@ -43,9 +43,9 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 5000;
-// app.listen(port, () => {
-//   console.log(`server listening on port: ${port}`);
-// })
+app.listen(port, () => {
+  console.log(`server listening on port: ${port}`);
+})
 
 const server = http.createServer(app);
 
@@ -73,6 +73,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
+server.listen(3001, () => {
   console.log("SERVER RUNNING");
 });

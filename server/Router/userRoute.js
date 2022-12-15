@@ -96,6 +96,11 @@ userRoute.post(
           username: user.username,
           email: user.email,
           role: user.role,
+          birthday: user.birthday,
+          phone: user.phone,
+          address: user.address,
+          isActive: user.isActive,
+          password:user.password,
           token: generateToken(user),
         });
         return;
@@ -152,7 +157,7 @@ userRoute.put(
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
-        avatar: updatedUser.avatar,
+        password:updatedUser.password,
         birthday: updatedUser.birthday,
         address: updatedUser.address,
         phone: updatedUser.phone,
