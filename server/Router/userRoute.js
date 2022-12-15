@@ -9,22 +9,12 @@ const userRoute = express.Router();
 userRoute.get(
   '/',
   isAuthenticated,
-  // isAdmin,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     const users = await User.find();
     res.send(users);
   })
 );
-
-// userRoute.get(
-//   '/listadmin',
-//   isAuthenticated,
-//   isMasterAdmin,
-//   expressAsyncHandler(async (req, res) => {
-//     const users = await User.find({role: 'admin'});
-//     res.send(users);
-//   })
-// );
 
 userRoute.post(
   '/',
@@ -142,13 +132,17 @@ userRoute.post(
 );
 
 userRoute.put(
-  '/profile',
+  '/:id/profile',
   isAuthenticated,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
-      user.name = req.body.username || user.username;
+      user.username = req.body.username || user.username;
       user.email = req.body.email || user.email;
+      user.address = req.body.address || user.address;
+      user.avatar = req.body.avatar || user.avatar;
+      user.birthday = req.body.birthday || user.birthday;
+      user.phone = req.body.phone || user.phone;
       if (req.body.password) {
         user.password = bcrypt.hashSync(req.body.password, 8);
       }
