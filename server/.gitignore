@@ -4,8 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-data.js
-seedRoutes.js
 
 # testing
 /coverage
