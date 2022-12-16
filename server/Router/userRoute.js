@@ -174,7 +174,7 @@ userRoute.put(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
-      user.isActive = req.body.isActive || user.isActive;
+      user.isActive = req.body.isActive
       if (req.body.password) {
         user.password = bcrypt.hashSync(req.body.password, 8)
       }
