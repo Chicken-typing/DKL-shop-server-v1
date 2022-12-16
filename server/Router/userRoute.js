@@ -155,13 +155,13 @@ userRoute.put(
       const updatedUser = await user.save();
       res.send({
         _id: updatedUser._id,
-        name: updatedUser.name,
+        name: updatedUser.username,
         email: updatedUser.email,
         password:updatedUser.password,
         birthday: updatedUser.birthday,
         address: updatedUser.address,
         phone: updatedUser.phone,
-        token: generateToken(updatedUser),
+        // token: generateToken(updatedUser), TODO:only use can edit password
       });
     } else {
       res.status(404).send({ message: 'User not found' });
