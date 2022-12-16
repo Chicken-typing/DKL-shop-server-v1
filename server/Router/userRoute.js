@@ -191,7 +191,7 @@ userRoute.put(
         birthday: updatedUser.birthday,
         address: updatedUser.address,
         phone: updatedUser.phone,
-        isActive: updateUser.isActive,
+        isActive: updatedUser.isActive,
         token: generateToken(updatedUser),
       });
     } else {
