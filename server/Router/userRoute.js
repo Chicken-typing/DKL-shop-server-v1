@@ -171,6 +171,7 @@ userRoute.put(
 userRoute.put(
   '/:id',
   isAuthenticated,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
