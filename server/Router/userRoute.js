@@ -57,7 +57,7 @@ userRoute.delete(
   isAuthenticated,
   isMasterAdmin,
   expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.body.id);
+    const user = await User.findById(req.params.id);
     if (user) {
       if (user.role === "masteradmin") {
         res.status(400).send({ message: "Can Not Delete Master Admin User" });
@@ -76,7 +76,7 @@ userRoute.delete(
   isAuthenticated,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.body.id);
+    const user = await User.findById(req.params.id);
     if (user) {
       if (user.role === "admin" || user.role === "masteradmin") {
         res.status(400).send({ message: "Can Not Delete Admin User" });
