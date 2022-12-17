@@ -1,13 +1,18 @@
-import express, { response } from 'express';
-import bcrypt from 'bcryptjs';
-import expressAsyncHandler from 'express-async-handler';
-import User from '../models/userModel.js';
-import { isAuthenticated, isAdmin, generateToken, isMasterAdmin } from '../utils.js';
+import express, { response } from "express";
+import bcrypt from "bcryptjs";
+import expressAsyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
+import {
+  isAuthenticated,
+  isAdmin,
+  generateToken,
+  isMasterAdmin,
+} from "../utils.js";
 
 const userRoute = express.Router();
 
 userRoute.get(
-  '/',
+  "/",
   isAuthenticated,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
@@ -17,7 +22,7 @@ userRoute.get(
 );
 
 userRoute.post(
-  '/',
+  "/",
   isAuthenticated,
   isMasterAdmin,
   expressAsyncHandler(async (req, res) => {
@@ -28,7 +33,7 @@ userRoute.post(
       birthday: req.body.birthday,
       address: req.body.address,
       phone: req.body.phone,
-      role: 'admin',
+      role: "admin",
       isActive: true,
       password: bcrypt.hashSync(req.body.password),
     });
@@ -40,7 +45,7 @@ userRoute.post(
       birthday: user.birthday,
       address: user.address,
       phone: user.phone,
-      role: 'admin',
+      role: "admin",
       isActive: true,
       token: generateToken(user),
     });
@@ -48,45 +53,45 @@ userRoute.post(
 );
 
 userRoute.delete(
-  'admin/:id',
+  "admin/:id",
   isAuthenticated,
   isMasterAdmin,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-      if (user.role === 'masteradmin') {
-        res.status(400).send({ message: 'Can Not Delete Master Admin User' });
+      if (user.role === "masteradmin") {
+        res.status(400).send({ message: "Can Not Delete Master Admin User" });
         return;
       }
       await user.remove();
-      res.send({ message: 'User Deleted' });
+      res.send({ message: "User Deleted" });
     } else {
-      res.status(404).send({ message: 'User Not Found' });
+      res.status(404).send({ message: "User Not Found" });
     }
   })
 );
 
 userRoute.delete(
-  '/:id',
+  "/:id",
   isAuthenticated,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-      if (user.role === 'admin'|| user.role === 'masteradmin') {
-        res.status(400).send({ message: 'Can Not Delete Admin User' });
+      if (user.role === "admin" || user.role === "masteradmin") {
+        res.status(400).send({ message: "Can Not Delete Admin User" });
         return;
       }
       await user.remove();
-      res.send({ message: 'User Deleted' });
+      res.send({ message: "User Deleted" });
     } else {
-      res.status(404).send({ message: 'User Not Found' });
+      res.status(404).send({ message: "User Not Found" });
     }
   })
 );
 
 userRoute.post(
-  '/signin',
+  "/signin",
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
@@ -100,18 +105,18 @@ userRoute.post(
           phone: user.phone,
           address: user.address,
           isActive: user.isActive,
-          password:user.password,
+          password: user.password,
           token: generateToken(user),
         });
         return;
       }
     }
-    res.status(401).send({ message: 'Invalid email or password' });
+    res.status(401).send({ message: "Invalid email or password" });
   })
 );
 
 userRoute.post(
-  '/signup',
+  "/signup",
   expressAsyncHandler(async (req, res) => {
     const newUser = new User({
       username: req.body.username,
@@ -120,7 +125,7 @@ userRoute.post(
       birthday: req.body.birthday,
       address: req.body.address,
       phone: req.body.phone,
-      role: 'customer',
+      role: "customer",
       isActive: true,
       password: bcrypt.hashSync(req.body.password),
     });
@@ -129,7 +134,7 @@ userRoute.post(
       _id: user._id,
       username: user.username,
       email: user.email,
-      role: 'customer',
+      role: "customer",
       isActive: true,
       token: generateToken(user),
     });
@@ -137,11 +142,11 @@ userRoute.post(
 );
 
 userRoute.put(
-  '/:id/profile',
+  "/:id/profile",
   isAuthenticated,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
-    if (user) {
+    if (user && user.role !== "masteradmin") {
       user.username = req.body.username || user.username;
       user.email = req.body.email || user.email;
       user.address = req.body.address || user.address;
@@ -149,39 +154,37 @@ userRoute.put(
       user.birthday = req.body.birthday || user.birthday;
       user.phone = req.body.phone || user.phone;
       if (req.body.password) {
-        user.password = bcrypt.hashSync(req.body.password, 8);
+        user.password = bcrypt.hashSync(req.body.password);
       }
-
       const updatedUser = await user.save();
       res.send({
         _id: updatedUser._id,
         name: updatedUser.username,
         email: updatedUser.email,
-        password:updatedUser.password,
+        password: updatedUser.password,
         birthday: updatedUser.birthday,
         address: updatedUser.address,
         phone: updatedUser.phone,
         // token: generateToken(updatedUser), TODO:only use can edit password
       });
     } else {
-      res.status(404).send({ message: 'User not found' });
+      res.status(404).send({ message: "User not found" });
     }
   })
 );
 userRoute.put(
-  '/:id',
+  "/:id",
   isAuthenticated,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    if (user) {
-      user.isActive = req.body.isActive
-      if (req.body.password) {
-        user.password = bcrypt.hashSync(req.body.password, 8)
-      }
-      else{
-        user.password = user.password;
-      }
-
+    const user = await User.findById(req.body._id);
+    if (user && user.role!=='masteradmin') {
+      user.isActive = req.body.isActive;
+      // if (req.body.password) {
+      //   user.password = bcrypt.hashSync(req.body.password, 8);
+      // } else {
+      //   user.password = user.password;
+      // }
       const updatedUser = await user.save();
       res.send({
         _id: updatedUser._id,
@@ -195,7 +198,7 @@ userRoute.put(
         token: generateToken(updatedUser),
       });
     } else {
-      res.status(404).send({ message: 'User not found' });
+      res.status(404).send({ message: "User not found" });
     }
   })
 );
