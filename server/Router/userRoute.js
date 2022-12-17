@@ -53,32 +53,13 @@ userRoute.post(
 );
 
 userRoute.delete(
-  "admin/:id",
-  isAuthenticated,
-  isMasterAdmin,
-  expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id);
-    if (user) {
-      if (user.role === "masteradmin") {
-        res.status(400).send({ message: "Can Not Delete Master Admin User" });
-        return;
-      }
-      await user.remove();
-      res.send({ message: "User Deleted" });
-    } else {
-      res.status(404).send({ message: "User Not Found" });
-    }
-  })
-);
-
-userRoute.delete(
   "/:id",
   isAuthenticated,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-      if (user.role === "admin" || user.role === "masteradmin") {
+      if (user.role === "masteradmin") {
         res.status(400).send({ message: "Can Not Delete Admin User" });
         return;
       }
