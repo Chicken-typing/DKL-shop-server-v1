@@ -120,16 +120,11 @@ productRoute.delete(
   "/:prodId/reviews/:id",
   isAuthenticated,
   expressAsyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.prodId);
-    if (product) {
-      const review = await product.reviews.findById(req.params.id);
-      if (review) {
-        await review.remove();
-        res.send({ message: "Review deleted" });
-      }
-    } else {
-      res.status(404).send({ message: "Review have been deleted" });
-    }
+  await  Product.findOneAndUpdate(
+      { _id: req.params.prodId },
+      { $pull: { reviews: { _id: req.params.id } } }
+    );
+    res.status(200).send({ message: "Review deleted" });
   })
 );
 
