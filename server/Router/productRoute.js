@@ -119,13 +119,14 @@ productRoute.post(
 productRoute.delete(
   "/:prodId/reviews/:id",
   isAuthenticated,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.prodId);
-    const review = await product.reviews.findById(req.params.id);
-    if (review) {
-      await review.remove();
-      res.send({ message: "Review deleted" });
+    if (product) {
+      const review = await product.reviews.findById(req.params.id);
+      if (review) {
+        await review.remove();
+        res.send({ message: "Review deleted" });
+      }
     } else {
       res.status(404).send({ message: "Review have been deleted" });
     }
