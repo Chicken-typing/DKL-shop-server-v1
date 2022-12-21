@@ -124,6 +124,15 @@ productRoute.delete(
       { _id: req.params.prodId },
       { $pull: { reviews: { _id: req.params.id } } }
     );
+    const product = await Product.findById(req.params.prodId);
+    if (product.reviews.length > 0) {
+       product.rating =
+         product.reviews.reduce((a, c) => c.rating + a, 0) /
+         product.reviews.length;
+    } else {
+       product.rating =0
+    }
+    await product.save()
     res.status(200).send({ message: "Review deleted" });
   })
 );
