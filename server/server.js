@@ -63,7 +63,16 @@ io.on("connect", (socket) => {
     const { user } = addUser(socket.id, account);
     Chat.findOne({ roomId: user.room }, (err, room) => {
       if (!room) {
-        Chat.create({ roomId: user.room, messages: [] });
+        Chat.create({
+          roomId: user.room,
+          messages: [
+            {
+              name: "DKL Store",
+              email: "admin",
+              message:"Welcome to DKL store!",
+            },
+          ],
+        });
       }
     });
 
@@ -73,7 +82,7 @@ io.on("connect", (socket) => {
   socket.on("sendMessage", ({ message }) => {
     const user = getUser(socket.id);
     const data = { user: user.name, email: user.email, message };
-    io.to(user.room).emit("message", [data]);
+    io.to(user.room).emit("message", data);
     Chat.findOne({ "chats.roomId": user.room }, (err, room) => {
       room.messages.push(data);
       room.save(function (err) {
