@@ -7,7 +7,7 @@ chatRoute.get("/:roomId", isAuthenticated, (req, res) => {
     if (room) {
       res.send(room).status(200);
     } else {
-      res.send([]).status(200);
+      res.send({messages:[]}).status(200);
     }
   });
 });
