@@ -13,6 +13,7 @@ import { Server } from "socket.io";
 import { addUser, getUser, getUsersInRoom, removeUser } from "./user.js";
 import Chat from "./models/chatModel.js";
 import { Db } from "mongodb";
+import authenRoute from "./Router/authenRoute.js";
 dotenv.config();
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -38,6 +39,7 @@ app.use("/api/users", userRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/upload", uploadRoute);
 app.use("/api/room", chatRoute);
+app.use("/vtoken", authenRoute);
 app.get("/api/keys/paypal", (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || "sb");
 });
